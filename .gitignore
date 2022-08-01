@@ -4,3 +4,4 @@ intermediate
 dask-worker-space
 minian_intermediate
 *.mp4
+__pycache__
