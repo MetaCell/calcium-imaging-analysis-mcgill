@@ -3,3 +3,4 @@ intermediate
 .ipynb_checkpoints
 dask-worker-space
 minian_intermediate
+*.mp4
