@@ -1,0 +1,517 @@
+10:59:09.550 -> scope on
+10:59:09.550 -> pre-trials,1
+10:59:15.589 -> NOGO trials,1
+10:59:17.666 -> active,1
+10:59:17.666 -> comissions,1
+10:59:27.679 -> pre-trials,2
+10:59:32.896 -> active,2
+10:59:32.896 -> premature,1
+10:59:32.990 -> active,3
+10:59:42.955 -> pre-trials,3
+10:59:48.957 -> GO trials,1
+10:59:51.955 -> omissions,1
+11:00:02.017 -> pre-trials,4
+11:00:11.017 -> GO trials,2
+11:00:11.386 -> active,4
+11:00:11.386 -> GOrewards,1
+11:00:11.709 -> active,5
+11:00:11.755 -> active,6
+11:00:21.486 -> pre-trials,5
+11:00:27.489 -> GO trials,3
+11:00:29.519 -> active,7
+11:00:29.519 -> GOrewards,2
+11:00:29.750 -> active,8
+11:00:39.630 -> pre-trials,6
+11:00:44.515 -> active,9
+11:00:44.515 -> premature,2
+11:00:54.530 -> pre-trials,7
+11:01:00.568 -> GO trials,4
+11:01:00.984 -> active,10
+11:01:01.029 -> GOrewards,3
+11:01:11.087 -> pre-trials,8
+11:01:14.136 -> NOGO trials,2
+11:01:15.568 -> active,11
+11:01:15.568 -> comissions,2
+11:01:22.670 -> active,12
+11:01:22.809 -> active,13
+11:01:25.621 -> pre-trials,9
+11:01:31.613 -> NOGO trials,3
+11:01:32.951 -> active,14
+11:01:32.951 -> comissions,3
+11:01:40.749 -> inactive,1
+11:01:43.006 -> pre-trials,10
+11:01:46.009 -> GO trials,5
+11:01:46.930 -> active,15
+11:01:46.976 -> GOrewards,4
+11:01:57.038 -> pre-trials,11
+11:02:03.046 -> NOGO trials,4
+11:02:06.141 -> NOGOrewards,1
+11:02:16.198 -> pre-trials,12
+11:02:19.195 -> NOGO trials,5
+11:02:20.307 -> active,16
+11:02:20.353 -> comissions,4
+11:02:30.363 -> pre-trials,13
+11:02:33.366 -> NOGO trials,6
+11:02:34.845 -> active,17
+11:02:34.845 -> comissions,5
+11:02:44.867 -> pre-trials,14
+11:02:53.910 -> GO trials,6
+11:02:54.739 -> active,18
+11:02:54.739 -> GOrewards,5
+11:02:54.877 -> active,19
+11:03:04.846 -> pre-trials,15
+11:03:10.887 -> GO trials,7
+11:03:13.881 -> omissions,2
+11:03:23.890 -> pre-trials,16
+11:03:28.133 -> active,20
+11:03:28.180 -> premature,3
+11:03:34.177 -> inactive,2
+11:03:34.546 -> inactive,3
+11:03:38.193 -> pre-trials,17
+11:03:44.194 -> NOGO trials,7
+11:03:45.855 -> active,21
+11:03:45.855 -> comissions,6
+11:03:55.861 -> pre-trials,18
+11:04:01.683 -> active,22
+11:04:01.728 -> premature,4
+11:04:02.007 -> active,23
+11:04:03.391 -> active,24
+11:04:03.437 -> active,25
+11:04:05.884 -> inactive,4
+11:04:06.711 -> inactive,5
+11:04:11.740 -> pre-trials,19
+11:04:20.746 -> GO trials,8
+11:04:21.393 -> active,26
+11:04:21.439 -> GOrewards,6
+11:04:31.499 -> pre-trials,20
+11:04:34.547 -> NOGO trials,8
+11:04:36.487 -> active,27
+11:04:36.487 -> comissions,7
+11:04:36.578 -> active,28
+11:04:46.547 -> pre-trials,21
+11:04:55.542 -> NOGO trials,9
+11:04:56.506 -> active,29
+11:04:56.506 -> comissions,8
+11:05:06.529 -> pre-trials,22
+11:05:08.925 -> active,30
+11:05:08.970 -> premature,5
+11:05:13.444 -> inactive,6
+11:05:14.453 -> inactive,7
+11:05:14.683 -> inactive,8
+11:05:18.975 -> pre-trials,23
+11:05:24.970 -> NOGO trials,10
+11:05:26.216 -> active,31
+11:05:26.263 -> comissions,9
+11:05:36.265 -> pre-trials,24
+11:05:42.311 -> NOGO trials,11
+11:05:44.109 -> active,32
+11:05:44.109 -> comissions,10
+11:05:44.201 -> active,33
+11:05:44.802 -> active,34
+11:05:54.131 -> pre-trials,25
+11:05:57.132 -> GO trials,9
+11:05:57.826 -> active,35
+11:05:57.826 -> GOrewards,7
+11:05:57.966 -> active,36
+11:06:07.941 -> pre-trials,26
+11:06:10.936 -> NOGO trials,12
+11:06:14.025 -> NOGOrewards,2
+11:06:24.068 -> pre-trials,27
+11:06:27.067 -> GO trials,10
+11:06:30.067 -> omissions,3
+11:06:40.086 -> pre-trials,28
+11:06:43.134 -> GO trials,11
+11:06:43.871 -> active,37
+11:06:43.871 -> GOrewards,8
+11:06:43.961 -> active,38
+11:06:53.982 -> pre-trials,29
+11:06:59.979 -> GO trials,12
+11:07:00.993 -> active,39
+11:07:00.993 -> GOrewards,9
+11:07:01.132 -> active,40
+11:07:11.104 -> pre-trials,30
+11:07:17.143 -> GO trials,13
+11:07:17.514 -> active,41
+11:07:17.514 -> GOrewards,10
+11:07:27.608 -> pre-trials,31
+11:07:35.407 -> active,42
+11:07:35.407 -> premature,6
+11:07:36.101 -> active,43
+11:07:36.285 -> active,44
+11:07:36.793 -> active,45
+11:07:45.469 -> pre-trials,32
+11:07:48.059 -> active,46
+11:07:48.105 -> premature,7
+11:07:54.290 -> active,47
+11:07:58.121 -> pre-trials,33
+11:08:07.124 -> NOGO trials,13
+11:08:10.220 -> NOGOrewards,3
+11:08:20.228 -> pre-trials,34
+11:08:29.287 -> GO trials,14
+11:08:30.441 -> active,48
+11:08:30.441 -> GOrewards,11
+11:08:40.545 -> pre-trials,35
+11:08:47.555 -> active,49
+11:08:47.555 -> premature,8
+11:08:56.092 -> active,50
+11:08:56.229 -> active,51
+11:08:57.564 -> active,52
+11:08:57.610 -> pre-trials,36
+11:09:00.608 -> NOGO trials,14
+11:09:01.579 -> active,53
+11:09:01.579 -> comissions,11
+11:09:10.306 -> inactive,9
+11:09:11.368 -> inactive,10
+11:09:11.368 -> inactive,11
+11:09:11.600 -> pre-trials,37
+11:09:12.339 -> inactive,12
+11:09:15.800 -> active,54
+11:09:15.800 -> premature,9
+11:09:15.938 -> active,55
+11:09:25.216 -> inactive,13
+11:09:25.585 -> inactive,14
+11:09:25.814 -> pre-trials,38
+11:09:34.870 -> GO trials,15
+11:09:34.870 -> active,56
+11:09:34.870 -> GOrewards,12
+11:09:35.055 -> active,57
+11:09:44.979 -> pre-trials,39
+11:09:47.978 -> GO trials,16
+11:09:48.994 -> active,58
+11:09:48.994 -> GOrewards,13
+11:09:59.101 -> pre-trials,40
+11:10:05.098 -> NOGO trials,15
+11:10:06.162 -> active,59
+11:10:06.162 -> comissions,12
+11:10:06.346 -> active,60
+11:10:16.217 -> pre-trials,41
+11:10:16.815 -> active,61
+11:10:16.815 -> premature,10
+11:10:26.831 -> pre-trials,42
+11:10:28.586 -> active,62
+11:10:28.586 -> premature,11
+11:10:28.725 -> active,63
+11:10:38.640 -> pre-trials,43
+11:10:41.636 -> NOGO trials,16
+11:10:44.732 -> NOGOrewards,4
+11:10:54.743 -> pre-trials,44
+11:11:03.327 -> active,64
+11:11:03.327 -> premature,12
+11:11:13.342 -> pre-trials,45
+11:11:16.389 -> NOGO trials,17
+11:11:19.433 -> NOGOrewards,5
+11:11:29.490 -> pre-trials,46
+11:11:38.534 -> GO trials,17
+11:11:39.039 -> active,65
+11:11:39.039 -> GOrewards,14
+11:11:49.145 -> pre-trials,47
+11:11:51.914 -> active,66
+11:11:51.914 -> premature,13
+11:12:01.978 -> pre-trials,48
+11:12:03.082 -> active,67
+11:12:03.082 -> premature,14
+11:12:13.130 -> pre-trials,49
+11:12:15.486 -> active,68
+11:12:15.486 -> premature,15
+11:12:23.573 -> active,69
+11:12:23.666 -> active,70
+11:12:24.081 -> active,71
+11:12:24.172 -> active,72
+11:12:24.218 -> active,73
+11:12:25.509 -> pre-trials,50
+11:12:31.511 -> NOGO trials,18
+11:12:31.879 -> active,74
+11:12:31.926 -> comissions,13
+11:12:32.018 -> active,75
+11:12:32.155 -> active,76
+11:12:41.935 -> pre-trials,51
+11:12:46.035 -> active,77
+11:12:46.035 -> premature,16
+11:12:46.266 -> active,78
+11:12:55.683 -> active,79
+11:12:56.053 -> pre-trials,52
+11:12:59.059 -> GO trials,18
+11:12:59.198 -> active,80
+11:12:59.198 -> GOrewards,15
+11:13:09.308 -> pre-trials,53
+11:13:12.306 -> NOGO trials,19
+11:13:13.827 -> active,81
+11:13:13.827 -> comissions,14
+11:13:23.844 -> pre-trials,54
+11:13:26.844 -> GO trials,19
+11:13:27.168 -> active,82
+11:13:27.168 -> GOrewards,16
+11:13:27.400 -> active,83
+11:13:37.269 -> pre-trials,55
+11:13:46.319 -> NOGO trials,20
+11:13:47.886 -> active,84
+11:13:47.932 -> comissions,15
+11:13:48.809 -> active,85
+11:13:57.948 -> pre-trials,56
+11:13:59.286 -> active,86
+11:13:59.286 -> premature,17
+11:14:09.337 -> pre-trials,57
+11:14:15.341 -> GO trials,20
+11:14:15.618 -> active,87
+11:14:15.618 -> GOrewards,17
+11:14:25.731 -> pre-trials,58
+11:14:29.239 -> active,88
+11:14:29.239 -> premature,18
+11:14:29.516 -> active,89
+11:14:37.541 -> inactive,15
+11:14:39.298 -> pre-trials,59
+11:14:42.294 -> NOGO trials,21
+11:14:44.603 -> active,90
+11:14:44.603 -> comissions,16
+11:14:49.308 -> inactive,16
+11:14:51.014 -> inactive,17
+11:14:51.245 -> inactive,18
+11:14:52.584 -> inactive,19
+11:14:52.630 -> inactive,20
+11:14:54.616 -> pre-trials,60
+11:14:56.782 -> inactive,21
+11:15:00.479 -> inactive,22
+11:15:00.895 -> inactive,23
+11:15:03.618 -> NOGO trials,22
+11:15:04.816 -> active,91
+11:15:04.816 -> comissions,17
+11:15:05.416 -> active,92
+11:15:14.833 -> pre-trials,61
+11:15:23.835 -> GO trials,21
+11:15:24.392 -> active,93
+11:15:24.392 -> GOrewards,18
+11:15:34.503 -> pre-trials,62
+11:15:40.234 -> active,94
+11:15:40.234 -> premature,19
+11:15:40.744 -> active,95
+11:15:41.761 -> active,96
+11:15:50.257 -> pre-trials,63
+11:15:51.594 -> active,97
+11:15:51.594 -> premature,20
+11:16:01.617 -> pre-trials,64
+11:16:08.409 -> active,98
+11:16:08.409 -> premature,21
+11:16:13.811 -> inactive,24
+11:16:18.430 -> pre-trials,65
+11:16:21.430 -> NOGO trials,23
+11:16:22.258 -> active,99
+11:16:22.304 -> comissions,18
+11:16:32.320 -> pre-trials,66
+11:16:33.198 -> active,100
+11:16:33.244 -> premature,22
+11:16:33.336 -> active,101
+11:16:43.265 -> pre-trials,67
+11:16:49.267 -> GO trials,22
+11:16:51.154 -> active,102
+11:16:51.201 -> GOrewards,19
+11:17:01.312 -> pre-trials,68
+11:17:07.304 -> GO trials,23
+11:17:09.149 -> active,103
+11:17:09.149 -> GOrewards,20
+11:17:19.268 -> pre-trials,69
+11:17:22.271 -> GO trials,24
+11:17:22.873 -> active,104
+11:17:22.920 -> GOrewards,21
+11:17:23.150 -> active,105
+11:17:32.986 -> pre-trials,70
+11:17:39.996 -> active,106
+11:17:39.996 -> premature,23
+11:17:50.013 -> pre-trials,71
+11:17:51.583 -> active,107
+11:17:51.583 -> premature,24
+11:17:51.768 -> active,108
+11:17:52.000 -> active,109
+11:17:52.091 -> active,110
+11:18:01.602 -> pre-trials,72
+11:18:04.553 -> active,111
+11:18:04.553 -> premature,25
+11:18:13.646 -> active,112
+11:18:14.571 -> pre-trials,73
+11:18:16.374 -> active,113
+11:18:16.374 -> premature,26
+11:18:19.010 -> active,114
+11:18:26.390 -> pre-trials,74
+11:18:29.429 -> NOGO trials,24
+11:18:32.515 -> NOGOrewards,6
+11:18:42.533 -> pre-trials,75
+11:18:51.539 -> GO trials,25
+11:18:53.247 -> active,115
+11:18:53.247 -> GOrewards,22
+11:18:53.340 -> active,116
+11:19:03.353 -> pre-trials,76
+11:19:12.386 -> NOGO trials,25
+11:19:12.754 -> active,117
+11:19:12.754 -> comissions,19
+11:19:12.894 -> active,118
+11:19:22.784 -> pre-trials,77
+11:19:24.542 -> active,119
+11:19:24.542 -> premature,27
+11:19:24.679 -> active,120
+11:19:27.315 -> active,121
+11:19:34.191 -> active,122
+11:19:34.329 -> active,123
+11:19:34.558 -> pre-trials,78
+11:19:39.264 -> active,124
+11:19:39.264 -> premature,28
+11:19:49.286 -> pre-trials,79
+11:19:55.327 -> GO trials,26
+11:19:56.621 -> active,125
+11:19:56.667 -> GOrewards,23
+11:20:06.778 -> pre-trials,80
+11:20:11.118 -> active,126
+11:20:11.118 -> premature,29
+11:20:21.128 -> pre-trials,81
+11:20:24.175 -> NOGO trials,26
+11:20:24.682 -> active,127
+11:20:24.682 -> comissions,20
+11:20:24.958 -> active,128
+11:20:34.695 -> pre-trials,82
+11:20:36.771 -> active,129
+11:20:36.771 -> premature,30
+11:20:36.863 -> active,130
+11:20:37.002 -> active,131
+11:20:38.064 -> active,132
+11:20:38.340 -> active,133
+11:20:46.787 -> pre-trials,83
+11:20:52.832 -> NOGO trials,27
+11:20:53.341 -> active,134
+11:20:53.341 -> comissions,21
+11:21:03.357 -> pre-trials,84
+11:21:06.400 -> NOGO trials,28
+11:21:06.722 -> active,135
+11:21:06.722 -> comissions,22
+11:21:06.861 -> active,136
+11:21:16.784 -> pre-trials,85
+11:21:19.324 -> active,137
+11:21:19.370 -> premature,31
+11:21:21.491 -> active,138
+11:21:29.383 -> pre-trials,86
+11:21:37.729 -> active,139
+11:21:37.729 -> premature,32
+11:21:39.671 -> inactive,25
+11:21:45.816 -> active,140
+11:21:47.755 -> pre-trials,87
+11:21:56.803 -> GO trials,27
+11:21:57.354 -> active,141
+11:21:57.354 -> GOrewards,24
+11:22:07.462 -> pre-trials,88
+11:22:10.461 -> GO trials,28
+11:22:13.461 -> omissions,4
+11:22:23.511 -> pre-trials,89
+11:22:29.511 -> NOGO trials,29
+11:22:29.832 -> active,142
+11:22:29.832 -> comissions,23
+11:22:30.111 -> active,143
+11:22:39.885 -> pre-trials,90
+11:22:44.596 -> active,144
+11:22:44.596 -> premature,33
+11:22:54.651 -> pre-trials,91
+11:22:59.501 -> active,145
+11:22:59.547 -> premature,34
+11:23:00.611 -> active,146
+11:23:09.566 -> pre-trials,92
+11:23:12.015 -> active,147
+11:23:12.061 -> premature,35
+11:23:12.200 -> active,148
+11:23:22.082 -> pre-trials,93
+11:23:25.688 -> active,149
+11:23:25.688 -> premature,36
+11:23:31.044 -> inactive,26
+11:23:33.816 -> inactive,27
+11:23:35.706 -> pre-trials,94
+11:23:38.748 -> NOGO trials,30
+11:23:40.639 -> active,150
+11:23:40.685 -> comissions,24
+11:23:45.432 -> inactive,28
+11:23:50.695 -> pre-trials,95
+11:23:53.694 -> NOGO trials,31
+11:23:56.689 -> active,151
+11:23:56.689 -> comissions,25
+11:24:06.698 -> pre-trials,96
+11:24:15.738 -> GO trials,29
+11:24:17.907 -> active,152
+11:24:17.907 -> GOrewards,25
+11:24:18.509 -> active,153
+11:24:28.051 -> pre-trials,97
+11:24:37.061 -> GO trials,30
+11:24:38.354 -> active,154
+11:24:38.354 -> GOrewards,26
+11:24:48.472 -> pre-trials,98
+11:24:51.469 -> GO trials,31
+11:24:52.113 -> active,155
+11:24:52.113 -> GOrewards,27
+11:25:02.214 -> pre-trials,99
+11:25:05.260 -> NOGO trials,32
+11:25:06.415 -> active,156
+11:25:06.461 -> comissions,26
+11:25:06.877 -> active,157
+11:25:16.476 -> pre-trials,100
+11:25:19.474 -> GO trials,32
+11:25:20.032 -> active,158
+11:25:20.032 -> GOrewards,28
+11:25:30.132 -> pre-trials,101
+11:25:35.119 -> active,159
+11:25:35.119 -> premature,37
+11:25:35.165 -> active,160
+11:25:45.176 -> pre-trials,102
+11:25:48.922 -> active,161
+11:25:48.922 -> premature,38
+11:25:58.979 -> pre-trials,103
+11:26:00.040 -> active,162
+11:26:00.086 -> premature,39
+11:26:02.072 -> active,163
+11:26:07.418 -> active,164
+11:26:10.095 -> pre-trials,104
+11:26:13.093 -> GO trials,33
+11:26:13.649 -> active,165
+11:26:13.649 -> GOrewards,29
+11:26:23.756 -> pre-trials,105
+11:26:29.748 -> NOGO trials,33
+11:26:32.838 -> NOGOrewards,7
+11:26:42.902 -> pre-trials,106
+11:26:45.900 -> NOGO trials,34
+11:26:48.992 -> NOGOrewards,8
+11:26:59.003 -> pre-trials,107
+11:27:05.049 -> GO trials,34
+11:27:07.039 -> active,166
+11:27:07.039 -> GOrewards,30
+11:27:17.149 -> pre-trials,108
+11:27:26.186 -> GO trials,35
+11:27:29.182 -> omissions,5
+11:27:31.396 -> active,167
+11:27:39.237 -> pre-trials,109
+11:27:42.234 -> GO trials,36
+11:27:45.230 -> omissions,6
+11:27:55.290 -> pre-trials,110
+11:28:00.368 -> active,168
+11:28:00.368 -> premature,40
+11:28:10.394 -> pre-trials,111
+11:28:16.403 -> GO trials,37
+11:28:18.902 -> active,169
+11:28:18.902 -> GOrewards,31
+11:28:29.002 -> pre-trials,112
+11:28:38.033 -> NOGO trials,35
+11:28:39.415 -> active,170
+11:28:39.415 -> comissions,27
+11:28:49.190 -> active,171
+11:28:49.422 -> pre-trials,113
+11:28:52.927 -> active,172
+11:28:52.973 -> premature,41
+11:29:02.995 -> pre-trials,114
+11:29:05.998 -> GO trials,38
+11:29:06.597 -> active,173
+11:29:06.597 -> GOrewards,32
+11:29:07.292 -> active,174
+11:29:16.697 -> -------------------------------------------
+11:29:16.744 -> session end
+11:29:16.744 -> -------------------------------------------
+11:29:16.790 -> GO trials,38
+11:29:16.837 -> GOrewards,32
+11:29:16.837 -> active,174
+11:29:16.837 -> inactive,28
+11:29:16.883 -> pre-trials,114
+11:29:16.883 -> premature,41
+11:29:16.883 -> omissions,6
+11:29:16.928 -> NOGO trials,35
+11:29:16.928 -> NOGOrewards,8
+11:29:16.928 -> comissions,27

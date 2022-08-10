@@ -1,7 +1,7 @@
-data
 intermediate
 .ipynb_checkpoints
 dask-worker-space
 minian_intermediate
 *.mp4
+*.avi
 __pycache__
