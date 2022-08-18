@@ -5,3 +5,4 @@ minian_intermediate
 *.mp4
 *.avi
 __pycache__
+data
