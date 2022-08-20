@@ -11,7 +11,7 @@ from routine.behavior import peri_evt_label, read_arduinolog, sync_frames
 IN_DPATH = "./data"
 IN_PS_PATH = "./intermediate/processed"
 IN_SS_CSV = "./metadata/sessions.csv"
-PARAM_CUE_PRD = (60, 60)
+PARAM_CUE_PRD = (60, 200)
 OUT_PATH = "./intermediate/frame_labels"
 os.makedirs(OUT_PATH, exist_ok=True)
 
