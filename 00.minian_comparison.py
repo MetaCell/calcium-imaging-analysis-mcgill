@@ -44,11 +44,9 @@ for org_path, new_path in zip(IN_ORG_DS, IN_NEW_DS):
     A_org = A_org.max("unit_id").compute().to_dataframe().reset_index()
     A_new = ds_new["A"].max("unit_id").compute().to_dataframe().reset_index()
     max_proj = norm(ds_new["max_proj"]).rename("A").to_dataframe().reset_index()
-    A_org = df_set_metadata(A_org, {"animal": anm, "session": ss, "run": "org"})[0]
-    A_new = df_set_metadata(A_new, {"animal": anm, "session": ss, "run": "new"})[0]
-    max_proj = df_set_metadata(max_proj, {"animal": anm, "session": ss, "run": "max"})[
-        0
-    ]
+    A_org = df_set_metadata(A_org, {"animal": anm, "session": ss, "run": "org"})
+    A_new = df_set_metadata(A_new, {"animal": anm, "session": ss, "run": "new"})
+    max_proj = df_set_metadata(max_proj, {"animal": anm, "session": ss, "run": "max"})
     A_df.extend([A_org, A_new, max_proj])
     ncell_df.extend(
         [

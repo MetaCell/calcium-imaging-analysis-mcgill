@@ -46,10 +46,16 @@ def corr_mat(a: np.ndarray, b: np.ndarray, agg_axis=0):
 def df_set_metadata(dfs: list, meta: dict):
     if type(dfs) is not list:
         dfs = [dfs]
+        return_single = True
+    else:
+        return_single = False
     for df in dfs:
         for k, v in meta.items():
             df[k] = v
-    return dfs
+    if return_single:
+        return dfs[0]
+    else:
+        return dfs
 
 
 def df_map_values(dfs: list, mappings: dict):
