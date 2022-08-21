@@ -1,8 +1,13 @@
 import itertools as itt
 import os
-import pandas as pd
 
 import numpy as np
+import pandas as pd
+import xarray as xr
+from tqdm.auto import tqdm
+
+IN_PS_PATH = "./intermediate/processed"
+IN_LAB_PATH = "./intermediate/frame_labels"
 
 
 def arr_break_idxs(a: np.ndarray):
@@ -65,3 +70,26 @@ def df_map_values(dfs: list, mappings: dict):
         for col, mp in mappings.items():
             df[col] = df[mp[0]].map(mp[1])
     return dfs
+
+
+def iter_ds(ds_path=IN_PS_PATH, lab_path=IN_LAB_PATH):
+    for ps_ds in tqdm(os.listdir(ds_path)):
+        ps_ds = xr.open_dataset(os.path.join(ds_path, ps_ds))
+        anm, ss = (
+            ps_ds.coords["animal"].values.item(),
+            ps_ds.coords["session"].values.item(),
+        )
+        lab_ds = xr.open_dataset(os.path.join(lab_path, "{}-{}.nc".format(anm, ss)))
+        ps_ds = ps_ds.assign_coords(lab_ds)
+        yield (anm, ss), ps_ds
+
+
+def df_roll(df, col_name="C", sh=None):
+    if sh is None:
+        sh = np.random.randint(len(df))
+    df[col_name] = np.roll(df[col_name], sh)
+    return df
+
+
+def q_score(a, value):
+    return np.nanmean(a < value)
