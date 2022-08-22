@@ -9,7 +9,7 @@ from routine.utilities import df_roll, df_set_metadata, iter_ds, q_score
 
 IN_SS = "./metadata/sessions.csv"
 PARAM_AGG_SUB = (-60, 60)
-PARAM_NSHUF = 1000
+PARAM_NSHUF = 10
 PARAM_SIG_THRES = 0.05
 OUT_PATH = "./intermediate/responsive_cell"
 FIG_PATH = "./figs/responsive_cell"
