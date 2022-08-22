@@ -12,3 +12,4 @@ dependencies:
   - pyarrow
   - netcdf4
   - tqdm
+  - seaborn
