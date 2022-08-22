@@ -50,23 +50,21 @@ def classify_cells(df, sig):
 
 
 #%% load data and compute shuffled mean
-Cmean_ls = []
+Cmean_full = pd.DataFrame()
 for (anm, ss), ps_ds in iter_ds():
     C_df = ps_ds["C"].to_dataframe().reset_index()
     Cmean = agg_cue(C_df)
     Cmean = df_set_metadata(Cmean, {"ishuf": -1, "animal": anm, "session": ss})
-    Cmean_ls.append(Cmean)
+    Cmean_full = pd.concat([Cmean_full, Cmean], ignore_index=True, copy=False)
     for ishuf in range(PARAM_NSHUF):
         C_shuf = C_df.groupby("unit_id").apply(df_roll)
         Cmean = agg_cue(C_shuf)
         Cmean = df_set_metadata(Cmean, {"ishuf": ishuf, "animal": anm, "session": ss})
-        Cmean_ls.append(Cmean)
-Cmean = (
-    pd.concat(Cmean_ls, ignore_index=True)
-    .astype({"cue_fm": int, "frame": int})
-    .drop(columns=["unit_labels"])
+        Cmean_full = pd.concat([Cmean_full, Cmean], ignore_index=True, copy=False)
+Cmean_full = Cmean_full.astype({"cue_fm": int, "frame": int}).drop(
+    columns=["unit_labels"]
 )
-Cmean.to_feather(os.path.join(OUT_PATH, "Cmean.feat"))
+Cmean_full.to_feather(os.path.join(OUT_PATH, "Cmean.feat"))
 
 #%% load shuffled mean and classify cells
 Cmean = pd.read_feather(os.path.join(OUT_PATH, "Cmean.feat"))
