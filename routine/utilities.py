@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 
 IN_PS_PATH = "./intermediate/processed"
 IN_LAB_PATH = "./intermediate/frame_labels"
+IN_REG_PATH = "./intermediate/cross_reg"
 
 
 def arr_break_idxs(a: np.ndarray):
@@ -72,7 +73,9 @@ def df_map_values(dfs: list, mappings: dict):
     return dfs
 
 
-def iter_ds(ds_path=IN_PS_PATH, lab_path=IN_LAB_PATH):
+def iter_ds(
+    ds_path=IN_PS_PATH, lab_path=IN_LAB_PATH, reg_path=IN_REG_PATH, subset_reg=False
+):
     for ps_ds in tqdm(os.listdir(ds_path)):
         ps_ds = xr.open_dataset(os.path.join(ds_path, ps_ds))
         anm, ss = (
@@ -81,6 +84,11 @@ def iter_ds(ds_path=IN_PS_PATH, lab_path=IN_LAB_PATH):
         )
         lab_ds = xr.open_dataset(os.path.join(lab_path, "{}-{}.nc".format(anm, ss)))
         ps_ds = ps_ds.assign_coords(lab_ds)
+        if subset_reg:
+            reg_df = pd.read_pickle(os.path.join(reg_path, "{}.pkl".format(anm)))
+            reg_df = reg_df[reg_df["session"].notnull().all(axis="columns")]
+            uids = np.sort(reg_df["session", ss]).astype(int)
+            ps_ds = ps_ds.sel(unit_id=uids)
         yield (anm, ss), ps_ds
 
 

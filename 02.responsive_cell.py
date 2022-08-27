@@ -51,7 +51,7 @@ def classify_cells(df, sig):
 
 #%% load data and compute shuffled mean
 Cmean_full = pd.DataFrame()
-for (anm, ss), ps_ds in iter_ds():
+for (anm, ss), ps_ds in iter_ds(subset_reg=True):
     C_df = ps_ds["C"].to_dataframe().reset_index()
     Cmean = agg_cue(C_df)
     Cmean = df_set_metadata(Cmean, {"ishuf": -1, "animal": anm, "session": ss})
