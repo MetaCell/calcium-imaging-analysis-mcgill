@@ -19,22 +19,30 @@ os.makedirs(FIG_PATH, exist_ok=True)
 
 
 def agg_cue(df):
-    return (
+    trace = (
         df[df["cue_fm"].notnull()]
         .groupby(["unit_id", "cue_lab", "cue_fm"])
         .mean()
         .reset_index()
     )
+    trace = trace.groupby(["unit_id", "cue_lab"]).apply(agg_baseline)
+    return trace
+
+
+def agg_baseline(df):
+    tlab = np.sign(df["cue_fm"])
+    baseline = df.loc[tlab < 0, "C"].mean()
+    std = np.std(df["C"])
+    if std > 0:
+        df["C"] = (df["C"] - baseline) / std
+    else:
+        df["C"] = np.nan
+    return df
 
 
 def agg_dff(df):
     tlab = np.sign(df["cue_fm"])
-    f_before = df.loc[tlab < 0, "C"].sum()
-    if f_before > 0:
-        f_after = df.loc[tlab > 0, "C"].sum()
-        return (f_after - f_before) / f_before
-    else:
-        return np.nan
+    return df.loc[tlab > 0, "C"].sum()
 
 
 def classify_cells(df, sig):
