@@ -109,3 +109,4 @@ g = sns.relplot(
 for ax in g.axes.flat:
     ax.axvline(0, color="gray", linestyle=":")
 g.savefig(os.path.join(FIG_PATH, "cells.svg"))
+g.savefig(os.path.join(FIG_PATH, "cells.png"), dpi=300)
