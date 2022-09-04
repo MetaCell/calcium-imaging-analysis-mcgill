@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from routine.utilities import df_roll, df_set_metadata, iter_ds, q_score
+from routine.utilities import df_roll, df_set_metadata, iter_ds, norm, q_score
 
 IN_SS = "./metadata/sessions.csv"
 PARAM_AGG_SUB = (-60, 60)
@@ -30,13 +30,12 @@ def agg_cue(df):
 
 
 def agg_baseline(df):
-    tlab = np.sign(df["cue_fm"])
-    baseline = df.loc[tlab < 0, "C"].mean()
-    std = np.std(df["C"])
-    if std > 0:
-        df["C"] = (df["C"] - baseline) / std
-    else:
-        df["C"] = np.nan
+    df["C"] = norm(df["C"]) * 99 + 1
+    if df["C"].notnull().all():
+        tlab = np.sign(df["cue_fm"])
+        baseline = df.loc[tlab < 0, "C"].mean()
+        assert baseline > 0
+        df["C"] = (df["C"] - baseline) / baseline
     return df
 
 
@@ -54,7 +53,7 @@ def classify_cells(df, sig):
         lab = "inhibited"
     else:
         lab = "non-modulated"
-    return pd.Series({"cell_type": lab, "qscore": q})
+    return pd.Series({"cell_type": lab, "qscore": q, "dff": dff.loc[-1]})
 
 
 #%% load data and compute shuffled mean
@@ -90,6 +89,8 @@ cell_lab = pd.read_csv(os.path.join(OUT_PATH, "cell_lab.csv"))
 sessions = pd.read_csv(IN_SS).drop(columns=["date", "data"])
 sessions["day"] = sessions["session"].apply(lambda s: s.split("_")[1])
 cell_df = cell_lab.merge(sessions, how="left", on=["animal", "session"])
+Cmean["C"] = Cmean["C"] * 100
+Cmean["time"] = Cmean["cue_fm"] / 20
 plot_df = (
     Cmean[Cmean["ishuf"] == -1]
     .drop(columns=["frame", "ishuf"])
@@ -98,15 +99,42 @@ plot_df = (
 plot_df["trace_type"] = "Day " + plot_df["day"] + " " + plot_df["cue_lab"]
 g = sns.relplot(
     data=plot_df,
-    x="cue_fm",
+    x="time",
     y="C",
     row="cell_type",
     col="group",
     kind="line",
     hue="trace_type",
     style="trace_type",
+    facet_kws={"sharey": "row"},
+    ci=68,
+    height=3.5,
+    aspect=1.2,
+    palette={
+        "Day 1 GO trials": "green",
+        "Day 1 NOGO trials": "red",
+        "Day 19 GO trials": "green",
+        "Day 19 NOGO trials": "red",
+    },
+    dashes={
+        "Day 1 GO trials": "",
+        "Day 1 NOGO trials": "",
+        "Day 19 GO trials": (5, 5),
+        "Day 19 NOGO trials": (5, 5),
+    },
+    hue_order=[
+        "Day 1 GO trials",
+        "Day 1 NOGO trials",
+        "Day 19 GO trials",
+        "Day 19 NOGO trials",
+    ],
 )
 for ax in g.axes.flat:
-    ax.axvline(0, color="gray", linestyle=":")
+    ax.set_xlabel("Time (s)")
+    ax.set_ylabel("DeltaF/F (%baseline)")
+    ax.set_xticks([-3, 0, 3, 10])
+    ax.axvline(0, color="gray")
+    ax.axhline(0, color="gray")
+    ax.axvspan(0, 3, color="gray", alpha=0.4)
 g.savefig(os.path.join(FIG_PATH, "cells.svg"))
 g.savefig(os.path.join(FIG_PATH, "cells.png"), dpi=300)

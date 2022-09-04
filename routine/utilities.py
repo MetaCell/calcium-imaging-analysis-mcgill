@@ -11,6 +11,11 @@ IN_LAB_PATH = "./intermediate/frame_labels"
 IN_REG_PATH = "./intermediate/cross_reg"
 
 
+def norm(a):
+    amin, amax = np.nanmin(a), np.nanmax(a)
+    return (a - amin) / (amax - amin)
+
+
 def arr_break_idxs(a: np.ndarray):
     return np.where(a[:-1] != a[1:])[0] + 1
 
