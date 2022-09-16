@@ -101,6 +101,14 @@ def standarize_df(df):
     )
 
 
+def separate_resp(r):
+    parts = r.split("-")
+    try:
+        return parts[1]
+    except IndexError:
+        return parts[0]
+
+
 #%% load data and compute shuffled mean
 Cmean_store = pd.HDFStore(os.path.join(OUT_PATH, "Cmean.h5"), mode="w")
 for method, ename in itt.product(PARAM_AGG_METHOD, PARAM_EVT):
@@ -165,7 +173,35 @@ cell_lab = (
 cell_lab.to_csv(os.path.join(OUT_PATH, "cell_lab.csv"), index=False)
 
 #%% plot activity
-Cmean = dd.read_hdf(os.path.join(OUT_PATH, "Cmean.h5"), "Cmean")
+plt_dict = {
+    "cue": {
+        "Day 1 GO trials": "green",
+        "Day 1 NOGO trials": "red",
+        "Day 19 GO trials": "green",
+        "Day 19 NOGO trials": "red",
+    },
+    "resp": {
+        "Day 1 correct": "green",
+        "Day 1 incorrect": "red",
+        "Day 19 correct": "green",
+        "Day 19 incorrect": "red",
+    },
+}
+dash_dict = {
+    "cue": {
+        "Day 1 GO trials": "",
+        "Day 1 NOGO trials": "",
+        "Day 19 GO trials": (5, 5),
+        "Day 19 NOGO trials": (5, 5),
+    },
+    "resp": {
+        "Day 1 correct": "",
+        "Day 1 incorrect": "",
+        "Day 19 correct": (5, 5),
+        "Day 19 incorrect": (5, 5),
+    },
+}
+Cmean = dd.read_hdf(os.path.join(OUT_PATH, "Cmean.h5"), "Cmean", chunksize=10000000)
 cell_lab = pd.read_csv(os.path.join(OUT_PATH, "cell_lab.csv"))
 Cmean = Cmean[Cmean["ishuf"] == -1].compute()
 sessions = pd.read_csv(IN_SS).drop(columns=["date", "data"])
@@ -173,6 +209,8 @@ sessions["day"] = sessions["session"].apply(lambda s: s.split("_")[1])
 cell_df = cell_lab.merge(sessions, how="left", on=["animal", "session"])
 Cmean["C"] = Cmean["C"] * 100
 Cmean["time"] = Cmean["evt_fm"] / 20
+Cmean["evt_lab"] = Cmean["evt_lab"].map(separate_resp)
+cell_df["evt_lab"] = cell_df["evt_lab"].map(separate_resp)
 plot_df = Cmean.drop(columns=["ishuf"]).merge(
     cell_df, on=["animal", "session", "unit_id", "by_event", "agg_method", "evt_lab"]
 )
@@ -191,48 +229,9 @@ for (evt, method), subdf in plot_df.groupby(["by_event", "agg_method"]):
         errorbar="se",
         height=3.5,
         aspect=1.2,
-        palette={
-            "Day 1 GO trials": "green",
-            "Day 1 NOGO trials": "red",
-            "Day 19 GO trials": "green",
-            "Day 19 NOGO trials": "red",
-            "Day 1 GO-correct": "green",
-            "Day 1 GO-incorrect": "teal",
-            "Day 1 NOGO-correct": "red",
-            "Day 1 NOGO-incorrect": "orange",
-            "Day 19 GO-correct": "green",
-            "Day 19 GO-incorrect": "teal",
-            "Day 19 NOGO-correct": "red",
-            "Day 19 NOGO-incorrect": "orange",
-        },
-        dashes={
-            "Day 1 GO trials": "",
-            "Day 1 NOGO trials": "",
-            "Day 19 GO trials": (5, 5),
-            "Day 19 NOGO trials": (5, 5),
-            "Day 1 GO-correct": "",
-            "Day 1 GO-incorrect": "",
-            "Day 1 NOGO-correct": "",
-            "Day 1 NOGO-incorrect": "",
-            "Day 19 GO-correct": (5, 5),
-            "Day 19 GO-incorrect": (5, 5),
-            "Day 19 NOGO-correct": (5, 5),
-            "Day 19 NOGO-incorrect": (5, 5),
-        },
-        hue_order=[
-            "Day 1 GO trials",
-            "Day 1 NOGO trials",
-            "Day 19 GO trials",
-            "Day 19 NOGO trials",
-            "Day 1 GO-correct",
-            "Day 1 GO-incorrect",
-            "Day 1 NOGO-correct",
-            "Day 1 NOGO-incorrect",
-            "Day 19 GO-correct",
-            "Day 19 GO-incorrect",
-            "Day 19 NOGO-correct",
-            "Day 19 NOGO-incorrect",
-        ],
+        palette=plt_dict[evt],
+        dashes=dash_dict[evt],
+        hue_order=list(plt_dict[evt].keys()),
     )
     for ax in g.axes.flat:
         ax.set_xlabel("Time (s)")
