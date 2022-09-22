@@ -161,9 +161,10 @@ for method, ename in itt.product(PARAM_AGG_METHOD, PARAM_EVT):
                 data_columns=True,
                 min_itemsize=PARAM_ITEM_SIZE,
             )
+Cmean_store.close()
 
 #%% load shuffled mean and classify cells
-Cmean = dd.read_hdf(os.path.join(OUT_PATH, "Cmean.h5"), "Cmean")
+Cmean = dd.read_hdf(os.path.join(OUT_PATH, "Cmean.h5"), "Cmean", chunksize=10000000)
 Cmean = Cmean[Cmean["evt_fm"].between(*PARAM_AGG_SUB)]
 cell_lab = (
     Cmean.groupby(["animal", "session", "by_event", "agg_method", "unit_id", "evt_lab"])
