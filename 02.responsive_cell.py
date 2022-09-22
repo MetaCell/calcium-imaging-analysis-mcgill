@@ -6,6 +6,7 @@ import dask.dataframe as dd
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from scipy.signal import medfilt
 
 from routine.utilities import df_roll, df_set_metadata, iter_ds, norm, q_score
 
@@ -22,6 +23,7 @@ PARAM_ITEM_SIZE = {
     "agg_method": max([len(m) for m in PARAM_AGG_METHOD]),
     "evt_lab": 20,
 }
+PARAM_SMOOTH = 7
 OUT_PATH = "./intermediate/responsive_cell"
 FIG_PATH = "./figs/responsive_cell"
 
@@ -35,6 +37,9 @@ def agg_cue(df, fm_name, lab_name, agg_method):
         .groupby(["unit_id", lab_name, fm_name])
         .mean()
         .reset_index()
+    )
+    trace["C"] = trace.groupby(["unit_id", lab_name])["C"].transform(
+        medfilt, kernel_size=PARAM_SMOOTH
     )
     trace = (
         trace.groupby(["unit_id", lab_name])
