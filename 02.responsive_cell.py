@@ -207,14 +207,19 @@ dash_dict = {
         "Day 19 incorrect": (5, 5),
     },
 }
+sns.set_theme(font="Calibri", font_scale=1.2)
+sns.set_style("ticks")
+grp_map = {"active": "Active Solvers", "passive": "Passive Solvers"}
+yrange_pad_fac = 1.1
 Cmean = dd.read_hdf(os.path.join(OUT_PATH, "Cmean.h5"), "Cmean", chunksize=10000000)
 cell_lab = pd.read_csv(os.path.join(OUT_PATH, "cell_lab.csv"))
 Cmean = Cmean[Cmean["ishuf"] == -1].compute()
 sessions = pd.read_csv(IN_SS).drop(columns=["date", "data"])
 sessions["day"] = sessions["session"].apply(lambda s: s.split("_")[1])
+sessions["group"] = sessions["group"].map(grp_map)
 cell_df = cell_lab.merge(sessions, how="left", on=["animal", "session"])
-Cmean["C"] = Cmean["C"] * 100
 Cmean["time"] = Cmean["evt_fm"] / 20
+Cmean['C'] = Cmean['C'] * 100
 Cmean["evt_lab"] = Cmean["evt_lab"].map(separate_resp)
 cell_df["evt_lab"] = cell_df["evt_lab"].map(separate_resp)
 plot_df = Cmean.drop(columns=["ishuf"]).merge(
@@ -222,6 +227,19 @@ plot_df = Cmean.drop(columns=["ishuf"]).merge(
 )
 plot_df["trace_type"] = "Day " + plot_df["day"] + " " + plot_df["evt_lab"]
 for (evt, method), subdf in plot_df.groupby(["by_event", "agg_method"]):
+    range_df = (
+        subdf.groupby(["cell_type", "group", "trace_type", "time"])["C"]
+        .agg(["mean", "sem"])
+        .reset_index()
+    )
+    range_df = range_df[range_df["cell_type"].isin(["inhibited", "non-modulated"])]
+    yrange = np.array(
+        [
+            (range_df["mean"] - range_df["sem"]).min(),
+            (range_df["mean"] + range_df["sem"]).max(),
+        ]
+    )
+    yrange = yrange * yrange_pad_fac
     g = sns.relplot(
         data=subdf,
         x="time",
@@ -233,6 +251,7 @@ for (evt, method), subdf in plot_df.groupby(["by_event", "agg_method"]):
         style="trace_type",
         facet_kws={"sharey": "row"},
         errorbar="se",
+        row_order=["activated", "inhibited", "non-modulated"],
         height=3.5,
         aspect=1.2,
         palette=plt_dict[evt],
@@ -246,5 +265,9 @@ for (evt, method), subdf in plot_df.groupby(["by_event", "agg_method"]):
         ax.axvline(0, color="gray")
         ax.axhline(0, color="gray")
         ax.axvspan(0, 3, color="gray", alpha=0.4)
+        tt = ax.title.get_text()
+        if "inhibited" in tt or "non-modulated" in tt:
+            ax.set_ylim(yrange)
+    g.set_titles(row_template="{row_name}", col_template="{col_name}")
     g.savefig(os.path.join(FIG_PATH, "{}-{}.svg".format(evt, method)))
     g.savefig(os.path.join(FIG_PATH, "{}-{}.png".format(evt, method)), dpi=300)
