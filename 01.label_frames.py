@@ -6,7 +6,13 @@ import pandas as pd
 import xarray as xr
 from tqdm.auto import tqdm
 
-from routine.behavior import peri_evt_label, read_arduinolog, sync_frames
+from routine.behavior import (
+    label_trial_result,
+    label_trials,
+    peri_evt_label,
+    read_arduinolog,
+    sync_frames,
+)
 
 IN_DPATH = "./data"
 IN_PS_PATH = "./intermediate/processed"
@@ -33,24 +39,34 @@ for _, row in tqdm(list(sessions.iterrows())):
         continue
     nfm = minian_ds.sizes["frame"]
     log_df = sync_frames(log_df, nfm)
-    evt_fm, evt_lab = peri_evt_label(
+    log_df["trial"] = label_trials(log_df)
+    log_df = log_df.groupby("trial").apply(label_trial_result)
+    cue_fm, cue_lab = peri_evt_label(
         log_df, ["GO trials", "NOGO trials"], nfm, PARAM_CUE_PRD
     )
-    cue_fm = xr.DataArray(
-        evt_fm,
-        dims=["frame"],
-        coords={"frame": minian_ds.coords["frame"]},
-        name="cue_fm",
+    resp_fm, resp_lab = peri_evt_label(
+        log_df,
+        ["GO-correct", "GO-incorrect", "NOGO-correct", "NOGO-incorrect"],
+        nfm,
+        PARAM_CUE_PRD,
     )
-    cue_lab = xr.DataArray(
-        evt_lab,
-        dims=["frame"],
-        coords={"frame": minian_ds.coords["frame"]},
-        name="cue_lab",
-    )
-    lab_ds = xr.merge([cue_fm, cue_lab]).assign_coords(
-        animal=row["animal"], session=row["session"]
-    )
+    res_dict = {
+        "cue_fm": cue_fm,
+        "cue_lab": cue_lab,
+        "resp_fm": resp_fm,
+        "resp_lab": resp_lab,
+    }
+    xr_ls = []
+    for vname, v in res_dict.items():
+        xr_ls.append(
+            xr.DataArray(
+                v,
+                dims=["frame"],
+                coords={"frame": minian_ds.coords["frame"]},
+                name=vname,
+            )
+        )
+    lab_ds = xr.merge(xr_ls).assign_coords(animal=row["animal"], session=row["session"])
     lab_ds.to_netcdf(
         os.path.join(OUT_PATH, "{}-{}.nc".format(row["animal"], row["session"]))
     )

@@ -13,3 +13,5 @@ dependencies:
   - netcdf4
   - tqdm
   - seaborn
+  - pytables
+  - dask
