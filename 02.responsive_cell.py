@@ -119,7 +119,7 @@ Cmean_store = pd.HDFStore(os.path.join(OUT_PATH, "Cmean.h5"), mode="w")
 for method, ename in itt.product(PARAM_AGG_METHOD, PARAM_EVT):
     print("processing by {} using {}".format(ename, method))
     evars = PARAM_EVT[ename]
-    for (anm, ss), ps_ds in iter_ds(subset_reg=True):
+    for (anm, ss), ps_ds in iter_ds(subset_reg=["Day4_1", "Day4_19"]):
         C_df = ps_ds["C"].to_dataframe().reset_index()
         Cmean = agg_cue(C_df, fm_name=evars[0], lab_name=evars[1], agg_method=method)
         Cmean = standarize_df(

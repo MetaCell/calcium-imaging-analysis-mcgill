@@ -79,7 +79,7 @@ def df_map_values(dfs: list, mappings: dict):
 
 
 def iter_ds(
-    ds_path=IN_PS_PATH, lab_path=IN_LAB_PATH, reg_path=IN_REG_PATH, subset_reg=False
+    ds_path=IN_PS_PATH, lab_path=IN_LAB_PATH, reg_path=IN_REG_PATH, subset_reg=None
 ):
     for ps_ds in tqdm(os.listdir(ds_path)):
         ps_ds = xr.open_dataset(os.path.join(ds_path, ps_ds))
@@ -89,9 +89,11 @@ def iter_ds(
         )
         lab_ds = xr.open_dataset(os.path.join(lab_path, "{}-{}.nc".format(anm, ss)))
         ps_ds = ps_ds.assign_coords(lab_ds)
-        if subset_reg:
+        if subset_reg is not None:
+            if ss not in subset_reg:
+                continue
             reg_df = pd.read_pickle(os.path.join(reg_path, "{}.pkl".format(anm)))
-            reg_df = reg_df[reg_df["session"].notnull().all(axis="columns")]
+            reg_df = reg_df[reg_df["session"][subset_reg].notnull().all(axis="columns")]
             uids = np.sort(reg_df["session", ss]).astype(int)
             ps_ds = ps_ds.sel(unit_id=uids)
         yield (anm, ss), ps_ds
