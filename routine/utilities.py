@@ -1,5 +1,6 @@
 import itertools as itt
 import os
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -87,8 +88,11 @@ def iter_ds(
             ps_ds.coords["animal"].values.item(),
             ps_ds.coords["session"].values.item(),
         )
-        lab_ds = xr.open_dataset(os.path.join(lab_path, "{}-{}.nc".format(anm, ss)))
-        ps_ds = ps_ds.assign_coords(lab_ds)
+        try:
+            lab_ds = xr.open_dataset(os.path.join(lab_path, "{}-{}.nc".format(anm, ss)))
+            ps_ds = ps_ds.assign_coords(lab_ds)
+        except FileNotFoundError:
+            warnings.warn("no frame label found for {} {}".format(anm, ss))
         if subset_reg is not None:
             if ss not in subset_reg:
                 continue
