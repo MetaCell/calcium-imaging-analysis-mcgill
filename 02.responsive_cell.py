@@ -219,7 +219,7 @@ sessions["day"] = sessions["session"].apply(lambda s: s.split("_")[1])
 sessions["group"] = sessions["group"].map(grp_map)
 cell_df = cell_lab.merge(sessions, how="left", on=["animal", "session"])
 Cmean["time"] = Cmean["evt_fm"] / 20
-Cmean['C'] = Cmean['C'] * 100
+Cmean["C"] = Cmean["C"] * 100
 Cmean["evt_lab"] = Cmean["evt_lab"].map(separate_resp)
 cell_df["evt_lab"] = cell_df["evt_lab"].map(separate_resp)
 plot_df = Cmean.drop(columns=["ishuf"]).merge(
