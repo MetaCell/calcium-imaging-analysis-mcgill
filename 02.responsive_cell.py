@@ -8,7 +8,7 @@ import pandas as pd
 import seaborn as sns
 
 from routine.utilities import df_roll, df_set_metadata, iter_ds
-from routine.cell_resp import agg_cue, standarize_df, classify_cells, separate_resp
+from routine.cell_resp import agg_cue, classify_cells, separate_resp
 
 IN_SS = "./metadata/sessions.csv"
 PARAM_AGG_SUB = (-60, 60)
@@ -29,6 +29,27 @@ FIG_PATH = "./figs/responsive_cell"
 
 os.makedirs(OUT_PATH, exist_ok=True)
 os.makedirs(FIG_PATH, exist_ok=True)
+
+
+def standarize_df(df, act_name="C"):
+    return (
+        df[
+            [
+                "animal",
+                "session",
+                "unit_id",
+                "by_event",
+                "agg_method",
+                "ishuf",
+                "evt_lab",
+                "evt_fm",
+                act_name,
+            ]
+        ]
+        .astype({"evt_fm": int})
+        .copy()
+    )
+
 
 #%% load data and compute shuffled mean
 Cmean_store = pd.HDFStore(os.path.join(OUT_PATH, "Cmean.h5"), mode="w")

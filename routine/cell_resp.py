@@ -61,26 +61,6 @@ def classify_cells(df, sig, fm_name="evt_fm", act_name="C"):
     return pd.Series({"cell_type": lab, "qscore": q, "dff": dff.loc[-1]})
 
 
-def standarize_df(df, act_name="C"):
-    return (
-        df[
-            [
-                "animal",
-                "session",
-                "unit_id",
-                "by_event",
-                "agg_method",
-                "ishuf",
-                "evt_lab",
-                "evt_fm",
-                act_name,
-            ]
-        ]
-        .astype({"evt_fm": int})
-        .copy()
-    )
-
-
 def separate_resp(r):
     parts = r.split("-")
     try:
