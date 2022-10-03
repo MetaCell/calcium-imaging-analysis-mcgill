@@ -80,7 +80,11 @@ def df_map_values(dfs: list, mappings: dict):
 
 
 def iter_ds(
-    ds_path=IN_PS_PATH, lab_path=IN_LAB_PATH, reg_path=IN_REG_PATH, subset_reg=None
+    ds_path=IN_PS_PATH,
+    lab_path=IN_LAB_PATH,
+    reg_path=IN_REG_PATH,
+    sub_anm=None,
+    subset_reg=None,
 ):
     for ps_ds in tqdm(os.listdir(ds_path)):
         ps_ds = xr.open_dataset(os.path.join(ds_path, ps_ds))
@@ -88,6 +92,8 @@ def iter_ds(
             ps_ds.coords["animal"].values.item(),
             ps_ds.coords["session"].values.item(),
         )
+        if sub_anm is not None and anm not in sub_anm:
+            continue
         try:
             lab_ds = xr.open_dataset(os.path.join(lab_path, "{}-{}.nc".format(anm, ss)))
             ps_ds = ps_ds.assign_coords(lab_ds)
