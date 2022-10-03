@@ -104,8 +104,10 @@ def iter_ds(
                 continue
             reg_df = pd.read_pickle(os.path.join(reg_path, "{}.pkl".format(anm)))
             reg_df = reg_df[reg_df["session"][subset_reg].notnull().all(axis="columns")]
-            uids = np.sort(reg_df["session", ss]).astype(int)
-            ps_ds = ps_ds.sel(unit_id=uids)
+            uids = reg_df["session", ss].astype(int)
+            ps_ds = ps_ds.sel(unit_id=uids.values).assign_coords(
+                master_uid=("unit_id", uids.index.values)
+            )
         yield (anm, ss), ps_ds
 
 
