@@ -3,12 +3,13 @@ import itertools as itt
 import os
 
 import dask.dataframe as dd
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 
+from routine.cell_resp import agg_cue, classify_cells
 from routine.utilities import df_roll, df_set_metadata, iter_ds
-from routine.cell_resp import agg_cue, classify_cells, separate_resp
 
 IN_SS = "./metadata/sessions.csv"
 PARAM_SUB_ANM = ["p3.2.1", "q1.4.1"]
@@ -152,3 +153,53 @@ for act_name in PARAM_ACT_VARS:
     cell_lab.to_csv(
         os.path.join(OUT_PATH, "cell_lab-{}.csv".format(act_name)), index=False
     )
+
+#%% plot raster
+cmap = {"C": "GnBu", "S": "Blues"}
+
+
+def act_heat(data, cell_lab, act_name, **kwargs):
+    idx_dims = ["animal", "master_uid", "evt_lab"]
+    data = data[idx_dims + ["evt_fm", act_name]].merge(
+        cell_lab[idx_dims], on=idx_dims, how="inner"
+    )
+    data["id"] = data["animal"] + "-" + data["master_uid"].astype(str)
+    data["evt_fm"] = data["evt_fm"] / 20
+    data = data.pivot(index="id", columns="evt_fm", values=act_name)
+    ax = sns.heatmap(
+        data, cmap=cmap[act_name], cbar=False, xticklabels=False, yticklabels=False
+    )
+    ax.set_xlabel("time")
+    ax.set_ylabel("cells")
+    for _, spine in ax.spines.items():
+        spine.set_visible(True)
+    ax.axvline(x=60, linestyle=":", color="grey")
+
+
+for act_name in PARAM_ACT_VARS:
+    cell_lab = pd.read_csv(os.path.join(OUT_PATH, "cell_lab-{}.csv".format(act_name)))
+    act = dd.read_hdf(
+        os.path.join(OUT_PATH, "{}mean.h5".format(act_name)), "mean", chunksize=10000000
+    )
+    act = act[act["ishuf"] == -1].compute()
+    for (by, agg, typ), cur_lab in cell_lab.groupby(
+        ["by_event", "agg_method", "cell_type"]
+    ):
+        cur_act = act[(act["by_event"] == by) & (act["agg_method"] == agg)]
+        g = sns.FacetGrid(
+            cur_act,
+            col="session",
+            row="evt_lab",
+            sharey="row",
+            sharex=True,
+            margin_titles=True,
+            col_order=PARAM_SESS,
+            despine=False,
+        )
+        g.map_dataframe(act_heat, cell_lab=cur_lab, act_name=act_name)
+        fig = g.figure
+        fig.subplots_adjust(wspace=0, hspace=0)
+        fig.savefig(
+            os.path.join(FIG_PATH, "{}-{}-{}-{}.svg".format(act_name, by, agg, typ))
+        )
+        plt.close(fig)
