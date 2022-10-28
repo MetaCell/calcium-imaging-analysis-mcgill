@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 from tqdm.auto import tqdm
+from sklearn.mixture import GaussianMixture
 
 IN_PS_PATH = "./intermediate/processed"
 IN_LAB_PATH = "./intermediate/frame_labels"
@@ -120,3 +121,17 @@ def df_roll(df, col_name="C", sh=None):
 
 def q_score(a, value):
     return np.nanmean(a < value)
+
+
+def thres_gmm(a: xr.DataArray, com=-1, pos_thres=0.9) -> xr.DataArray:
+    ret = np.full_like(a, np.nan)
+    idx = ~np.isnan(a)
+    if idx.sum() > 0:
+        a = a[idx].reshape(-1, 1)
+        gmm = GaussianMixture(n_components=2)
+        gmm.fit(a)
+        idg = np.argsort(gmm.means_.reshape(-1))[com]
+        s = (gmm.predict(a) == idg).reshape(-1)
+        if s.sum() / len(s) < pos_thres:
+            ret[idx] = s
+    return ret
