@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from routine.utilities import df_roll, df_set_metadata, iter_ds
 from routine.cell_resp import agg_cue, classify_cells, separate_resp
+from routine.utilities import df_roll, df_set_metadata, iter_ds
 
 IN_SS = "./metadata/sessions.csv"
 PARAM_AGG_SUB = (-60, 60)
@@ -43,6 +43,7 @@ def standarize_df(df, act_name="C"):
                 "ishuf",
                 "evt_lab",
                 "evt_fm",
+                "master_uid",
                 act_name,
             ]
         ]
@@ -110,7 +111,17 @@ Cmean_store.close()
 Cmean = dd.read_hdf(os.path.join(OUT_PATH, "Cmean.h5"), "Cmean", chunksize=10000000)
 Cmean = Cmean[Cmean["evt_fm"].between(*PARAM_AGG_SUB)]
 cell_lab = (
-    Cmean.groupby(["animal", "session", "by_event", "agg_method", "unit_id", "evt_lab"])
+    Cmean.groupby(
+        [
+            "animal",
+            "session",
+            "by_event",
+            "agg_method",
+            "unit_id",
+            "evt_lab",
+            "master_uid",
+        ]
+    )
     .apply(
         classify_cells,
         sig=PARAM_SIG_THRES,
