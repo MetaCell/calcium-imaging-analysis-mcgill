@@ -50,6 +50,7 @@ def label_trials(log_df, trial_bounds=["pre-trials"]):
 
 
 def label_trial_result(trial_df, trial_lab=["GO trials", "NOGO trials", "premature"]):
+    # extract trial type
     ttype_row = trial_df[trial_df["event"].isin(trial_lab)]
     if len(ttype_row) == 0:
         return trial_df
@@ -59,29 +60,31 @@ def label_trial_result(trial_df, trial_lab=["GO trials", "NOGO trials", "prematu
     ttype = ttype_row["event"].values.item().split()[0]
     if ttype == "premature":
         return trial_df
+    # determine response
     resps = trial_df["event"]
-    correct_resp = resps[resps == ttype + "rewards"]
-    if len(correct_resp) == 1:
-        correct_idx = correct_resp.index
-        trial_df.loc[correct_idx, "event"] = "-".join((ttype, "correct"))
-    elif len(correct_resp) == 0:
-        if ttype == "GO":
-            wrong_resp = resps[resps == "omissions"]
-            assert (
-                len(wrong_resp) == 1
-            ), "GO trials without reward should have 'omissions' as response"
-        elif ttype == "NOGO":
+    if ttype == "GO":
+        r = resps.loc[ttype_row.index + 1]
+        if r.values.item() == "active":  # correct
+            resp_add = trial_df.loc[r.index].copy()
+            resp_add["event"] = "-".join((ttype, "correct"))
+        else:  # incorrect
+            resp_add = ttype_row.copy()
+            resp_add["event"] = "-".join((ttype, "incorrect"))
+    elif ttype == "NOGO":
+        correct_resp = resps[resps.isin([ttype + "rewards", "rewards"])]
+        if len(correct_resp) == 1:  # correct
+            resp_add = trial_df.loc[correct_resp.index].copy()
+            resp_add["event"] = "-".join((ttype, "correct"))
+        elif len(correct_resp) == 0:  # incorrect
             wrong_resp = resps[resps == "comissions"]
             assert (
                 len(wrong_resp) == 1
-            ), "NOGO trials without reward should have 'active' as response"
+            ), "NOGO trials without reward should have one 'comissions' response"
+            resp_add = trial_df.loc[wrong_resp.index].copy()
+            resp_add["event"] = "-".join((ttype, "incorrect"))
         else:
-            raise ValueError("Wrong trial type: {}".format(ttype))
-        trial_df.loc[wrong_resp.index, "event"] = "-".join((ttype, "incorrect"))
+            raise ValueError("Multiple reward value found:\n{}".format(trial_df))
     else:
-        raise ValueError(
-            "Don't know how to interpret response for {} trials: {}".format(
-                ttype, resps
-            )
-        )
+        raise ValueError("Don't understand trial type: {}".format(ttype))
+    trial_df = pd.concat([trial_df, resp_add], ignore_index=True)
     return trial_df

@@ -6,9 +6,9 @@ import dask.dataframe as dd
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from scipy.signal import medfilt
 
-from routine.utilities import df_roll, df_set_metadata, iter_ds, norm, q_score
+from routine.cell_resp import agg_cue, classify_cells, separate_resp
+from routine.utilities import df_roll, df_set_metadata, iter_ds
 
 IN_SS = "./metadata/sessions.csv"
 PARAM_AGG_SUB = (-60, 60)
@@ -31,62 +31,7 @@ os.makedirs(OUT_PATH, exist_ok=True)
 os.makedirs(FIG_PATH, exist_ok=True)
 
 
-def agg_cue(df, fm_name, lab_name, agg_method):
-    trace = (
-        df[df[fm_name].notnull()]
-        .groupby(["unit_id", lab_name, fm_name])
-        .mean()
-        .reset_index()
-    )
-    trace["C"] = trace.groupby(["unit_id", lab_name])["C"].transform(
-        medfilt, kernel_size=PARAM_SMOOTH
-    )
-    trace = (
-        trace.groupby(["unit_id", lab_name])
-        .apply(agg_baseline, fm_name=fm_name, method=agg_method)
-        .rename(columns={fm_name: "evt_fm", lab_name: "evt_lab"})
-    )
-    return trace
-
-
-def agg_baseline(df, fm_name, method="minmax"):
-    tlab = np.sign(df[fm_name])
-    if method == "minmax":
-        df["C"] = norm(df["C"]) * 99 + 1
-        if df["C"].notnull().all():
-            baseline = df.loc[tlab < 0, "C"].mean()
-            assert baseline > 0
-            df["C"] = (df["C"] - baseline) / baseline
-        else:
-            df["C"] = np.nan
-    elif method == "zscore":
-        baseline = df.loc[tlab < 0, "C"].mean()
-        std = np.std(df["C"])
-        if std > 0:
-            df["C"] = (df["C"] - baseline) / std
-        else:
-            df["C"] = np.nan
-    return df
-
-
-def agg_dff(df, fm_name):
-    tlab = np.sign(df[fm_name])
-    return df.loc[tlab > 0, "C"].sum()
-
-
-def classify_cells(df, sig, fm_name="evt_fm"):
-    dff = df.groupby("ishuf").apply(agg_dff, fm_name=fm_name)
-    q = q_score(dff.loc[0:], dff.loc[-1])
-    if q > 1 - sig:
-        lab = "activated"
-    elif q < sig:
-        lab = "inhibited"
-    else:
-        lab = "non-modulated"
-    return pd.Series({"cell_type": lab, "qscore": q, "dff": dff.loc[-1]})
-
-
-def standarize_df(df):
+def standarize_df(df, act_name="C"):
     return (
         df[
             [
@@ -98,20 +43,13 @@ def standarize_df(df):
                 "ishuf",
                 "evt_lab",
                 "evt_fm",
-                "C",
+                "master_uid",
+                act_name,
             ]
         ]
         .astype({"evt_fm": int})
         .copy()
     )
-
-
-def separate_resp(r):
-    parts = r.split("-")
-    try:
-        return parts[1]
-    except IndexError:
-        return parts[0]
 
 
 #%% load data and compute shuffled mean
@@ -121,7 +59,13 @@ for method, ename in itt.product(PARAM_AGG_METHOD, PARAM_EVT):
     evars = PARAM_EVT[ename]
     for (anm, ss), ps_ds in iter_ds(subset_reg=["Day4_1", "Day4_19"]):
         C_df = ps_ds["C"].to_dataframe().reset_index()
-        Cmean = agg_cue(C_df, fm_name=evars[0], lab_name=evars[1], agg_method=method)
+        Cmean = agg_cue(
+            C_df,
+            fm_name=evars[0],
+            lab_name=evars[1],
+            agg_method=method,
+            smooth_ksize=PARAM_SMOOTH,
+        )
         Cmean = standarize_df(
             df_set_metadata(
                 Cmean,
@@ -167,7 +111,17 @@ Cmean_store.close()
 Cmean = dd.read_hdf(os.path.join(OUT_PATH, "Cmean.h5"), "Cmean", chunksize=10000000)
 Cmean = Cmean[Cmean["evt_fm"].between(*PARAM_AGG_SUB)]
 cell_lab = (
-    Cmean.groupby(["animal", "session", "by_event", "agg_method", "unit_id", "evt_lab"])
+    Cmean.groupby(
+        [
+            "animal",
+            "session",
+            "by_event",
+            "agg_method",
+            "unit_id",
+            "evt_lab",
+            "master_uid",
+        ]
+    )
     .apply(
         classify_cells,
         sig=PARAM_SIG_THRES,

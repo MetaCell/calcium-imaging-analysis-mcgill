@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 from tqdm.auto import tqdm
+from sklearn.mixture import GaussianMixture
 
 IN_PS_PATH = "./intermediate/processed"
 IN_LAB_PATH = "./intermediate/frame_labels"
@@ -80,7 +81,11 @@ def df_map_values(dfs: list, mappings: dict):
 
 
 def iter_ds(
-    ds_path=IN_PS_PATH, lab_path=IN_LAB_PATH, reg_path=IN_REG_PATH, subset_reg=None
+    ds_path=IN_PS_PATH,
+    lab_path=IN_LAB_PATH,
+    reg_path=IN_REG_PATH,
+    sub_anm=None,
+    subset_reg=None,
 ):
     for ps_ds in tqdm(os.listdir(ds_path)):
         ps_ds = xr.open_dataset(os.path.join(ds_path, ps_ds))
@@ -88,6 +93,8 @@ def iter_ds(
             ps_ds.coords["animal"].values.item(),
             ps_ds.coords["session"].values.item(),
         )
+        if sub_anm is not None and anm not in sub_anm:
+            continue
         try:
             lab_ds = xr.open_dataset(os.path.join(lab_path, "{}-{}.nc".format(anm, ss)))
             ps_ds = ps_ds.assign_coords(lab_ds)
@@ -98,8 +105,10 @@ def iter_ds(
                 continue
             reg_df = pd.read_pickle(os.path.join(reg_path, "{}.pkl".format(anm)))
             reg_df = reg_df[reg_df["session"][subset_reg].notnull().all(axis="columns")]
-            uids = np.sort(reg_df["session", ss]).astype(int)
-            ps_ds = ps_ds.sel(unit_id=uids)
+            uids = reg_df["session", ss].astype(int)
+            ps_ds = ps_ds.sel(unit_id=uids.values).assign_coords(
+                master_uid=("unit_id", uids.index.values)
+            )
         yield (anm, ss), ps_ds
 
 
@@ -112,3 +121,17 @@ def df_roll(df, col_name="C", sh=None):
 
 def q_score(a, value):
     return np.nanmean(a < value)
+
+
+def thres_gmm(a: xr.DataArray, com=-1, pos_thres=0.9) -> xr.DataArray:
+    ret = np.full_like(a, np.nan)
+    idx = ~np.isnan(a)
+    if idx.sum() > 0:
+        a = a[idx].reshape(-1, 1)
+        gmm = GaussianMixture(n_components=2)
+        gmm.fit(a)
+        idg = np.argsort(gmm.means_.reshape(-1))[com]
+        s = (gmm.predict(a) == idg).reshape(-1)
+        if s.sum() / len(s) < pos_thres:
+            ret[idx] = s
+    return ret
